@@ -1,4 +1,5 @@
 import sequelize from "../sequelize"
+import bcrypt from "bcrypt"
 import { DataType, DataTypes } from "sequelize"
 
 const Cuenta = sequelize.define(
@@ -6,7 +7,8 @@ const Cuenta = sequelize.define(
     {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true
         },
 
         email: {
@@ -25,9 +27,16 @@ const Cuenta = sequelize.define(
                 notEmpty: true
             },
 
-            set: (args) => {
-                console.log(args)
+            set(value: string){
+                // Está mal implementado la generación del salt
+                const salt = bcrypt.genSaltSync(123)
+
+                const hashedPassword = bcrypt.hashSync(value, salt)
+
+                this.setDataValue("password", hashedPassword)
             }
         }
     }
 )
+
+export default Cuenta
