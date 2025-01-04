@@ -15,7 +15,9 @@ const Cuenta = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                isEmail: true
+                isEmail: {
+                    msg: "El email debe ser un email válido xd"
+                }
             }
         },
 
@@ -24,7 +26,13 @@ const Cuenta = sequelize.define(
             allowNull: false,
             validate: {
                 min: 11,
-                notEmpty: true
+                notEmpty: {
+                    msg: "La contraseña no puede estar vacía"
+                },
+
+                foo(value: string){
+                    console.log("validando valor", value)
+                }
             },
 
             set(value: string){

@@ -8,21 +8,19 @@ type crearCuentaDTO = {
 export const crearCuenta = async(request: Request<{}, {}, crearCuentaDTO>, response: Response) => {
     const { email, password } = request.body
 
-    const faltantes = []
+    const serviceResponse = await Cuenta.crearCuenta(email, password)
 
-    if (!email) faltantes.push("email")
-    if (!password) faltantes.push("password")
-
-    if (faltantes.length > 0) {
-        response.status(400).json({
-            message: "Faltan datos para crear la cuenta",
-            faltantes
+    if (!serviceResponse.error && serviceResponse.nuevaCuenta) {
+        response.status(201).json({ 
+            nuevaCuenta: serviceResponse.nuevaCuenta 
         })
     } else {
-        const nuevaCuenta = await Cuenta.crearCuenta(email, password)
-
-        response.status(201).json({ nuevaCuenta })
+        response.status(400).json({ 
+            error: "Error al crear la cuenta",
+            failed: serviceResponse.messages
+        })
     }
+
 }
 
 export const obtenerCuentas = async(request: Request, response: Response) => {
