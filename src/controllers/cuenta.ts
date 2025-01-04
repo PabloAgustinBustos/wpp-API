@@ -24,3 +24,12 @@ export const crearCuenta = async(request: Request<{}, {}, crearCuentaDTO>, respo
         response.status(201).json({ nuevaCuenta })
     }
 }
+
+export const obtenerCuentas = async(request: Request, response: Response) => {
+    const cuentas = await Cuenta.obtenerCuentas() as unknown[]
+
+    response.status(200).json({ 
+        amount: cuentas.length,
+        cuentas 
+    })
+}

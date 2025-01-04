@@ -8,7 +8,7 @@ import Cuenta from "./models/Cuenta"
 const SERVER_PORT = process.env.SERVER_PORT as string
 
 sequelize.authenticate().then(() => {
-    sequelize.sync({ force: true })
+    sequelize.sync({ alter: true })
 
     app.listen(SERVER_PORT, () => console.log(`Escuchando al puerto ${SERVER_PORT}`))
 }).catch(e => {

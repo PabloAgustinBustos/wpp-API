@@ -10,3 +10,13 @@ export const crearCuenta = async(email: string, password: string) => {
         console.log("Error al crear una cuenta", e)
     }
 }
+
+export const obtenerCuentas = async() => {
+    try {
+        const cuentas = await Cuenta.findAll()
+
+        return cuentas.map(cuenta => cuenta.dataValues)        
+    } catch(e) {
+        console.log("Error al obtener cuentas", e)
+    }
+}

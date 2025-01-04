@@ -28,8 +28,7 @@ const Cuenta = sequelize.define(
             },
 
             set(value: string){
-                // Está mal implementado la generación del salt
-                const salt = bcrypt.genSaltSync(123)
+                const salt = bcrypt.genSaltSync(10)
 
                 const hashedPassword = bcrypt.hashSync(value, salt)
 
