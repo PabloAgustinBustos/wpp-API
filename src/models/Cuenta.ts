@@ -1,8 +1,19 @@
 import sequelize from "../sequelize"
 import bcrypt from "bcrypt"
-import { DataType, DataTypes } from "sequelize"
+import { DataType, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
 
-const Cuenta = sequelize.define(
+type CuentaData = {
+    id: string
+    email: string,
+    password: string,
+}
+
+// TODO: https://sequelize.org/docs/v6/other-topics/typescript/#usage-of-sequelizedefine
+interface CuentaModel extends Model<InferAttributes<CuentaData>, InferCreationAttributes<CuentaData>> {
+
+}
+
+const Cuenta = sequelize.define<Model<CuentaSchema>>(
     "cuentas",
     {
         id: {

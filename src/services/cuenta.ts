@@ -10,7 +10,7 @@ export type crearCuentaReturnType = {
 export const crearCuenta = async(email: string, password: string): Promise<crearCuentaReturnType> => {
     try {
         const nuevaCuenta = await Cuenta.create({email, password})
-        
+        //nuevaCuenta.dataValues.
         return {
             error: false,
             nuevaCuenta: nuevaCuenta.dataValues

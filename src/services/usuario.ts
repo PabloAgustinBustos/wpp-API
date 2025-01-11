@@ -13,7 +13,7 @@ export const crearUsuario = async(id: string, username: string) => {
 
         const user = await cuenta.createUsuario({username})
 
-        console.log(user)
+        console.log(cuenta)
     } catch(e) {
         return {
             error: true,

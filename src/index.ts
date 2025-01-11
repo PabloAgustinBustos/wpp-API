@@ -21,6 +21,8 @@ sequelize.authenticate().then(() => {
         alter: false
     })
 
+    console.log("conectado a la bd")
+
     app.listen(SERVER_PORT, () => console.log(`Escuchando al puerto ${SERVER_PORT}`))
 }).catch(e => {
     console.log("Error al conectar con postgres", e)
