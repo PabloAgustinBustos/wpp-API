@@ -2,19 +2,9 @@ import sequelize from "../sequelize"
 import bcrypt from "bcrypt"
 import { DataType, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
 
-type CuentaData = {
-    id: string
-    email: string,
-    password: string,
-}
+class Cuenta extends Model {}
 
-// TODO: https://sequelize.org/docs/v6/other-topics/typescript/#usage-of-sequelizedefine
-interface CuentaModel extends Model<InferAttributes<CuentaData>, InferCreationAttributes<CuentaData>> {
-
-}
-
-const Cuenta = sequelize.define<Model<CuentaSchema>>(
-    "cuentas",
+Cuenta.init(
     {
         id: {
             type: DataTypes.UUID,
@@ -54,7 +44,13 @@ const Cuenta = sequelize.define<Model<CuentaSchema>>(
                 this.setDataValue("password", hashedPassword)
             }
         }
+    },
+    {
+        sequelize,
+        modelName: "cuentas"
     }
 )
+
+console.log("Modelos creados", sequelize.models)
 
 export default Cuenta

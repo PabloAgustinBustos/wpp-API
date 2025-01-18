@@ -1,8 +1,9 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../sequelize";
 
-const Perfil = sequelize.define(
-    "perfil",
+class Perfil extends Model {}
+
+Perfil.init(
     {
         id: {
             type: DataTypes.UUID,
@@ -35,7 +36,13 @@ const Perfil = sequelize.define(
             type: DataTypes.INTEGER,
             defaultValue: 0
         }
+    },
+    {
+        sequelize,
+        modelName: "perfiles"
     }
 )
+
+console.log("Modelos creados", sequelize.models)
 
 export default Perfil

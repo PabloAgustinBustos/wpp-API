@@ -11,7 +11,7 @@ export const crearUsuario = async(id: string, username: string) => {
             }
         }
 
-        const user = await cuenta.createUsuario({username})
+        //const user = await cuenta.createUsuario({username})
 
         console.log(cuenta)
     } catch(e) {
