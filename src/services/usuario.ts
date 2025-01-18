@@ -1,23 +1,17 @@
+import { InferAttributes, ValidationError } from "sequelize"
 import Cuenta from "../models/Cuenta"
+import Usuario from "../models/Usuario"
+import { CrearReturnType } from "./types";
 
-export const crearUsuario = async(id: string, username: string) => {
-    try {
-        const cuenta = await Cuenta.findByPk(id)
+interface CrearUsuarioReturnType extends CrearReturnType {
+    nuevoUsuario?: InferAttributes<Usuario, { omit: never; }>
+}
 
-        if(!cuenta) {
-            return {
-                error: true,
-                message: "Cuenta no encontrada"
-            }
-        }
+export const crearUsuario = async(id: string, username: string): Promise<CrearUsuarioReturnType> => {
+    const user = await Usuario.create({username, cuentaId: id})
 
-        //const user = await cuenta.createUsuario({username})
-
-        console.log(cuenta)
-    } catch(e) {
-        return {
-            error: true,
-            e
-        }
+    return {
+        error: false,
+        nuevoUsuario: user.dataValues
     }
 }

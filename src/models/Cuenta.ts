@@ -1,8 +1,13 @@
 import sequelize from "../sequelize"
 import bcrypt from "bcrypt"
-import { DataType, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
+import { CreationOptional, DataType, DataTypes, HasOneCreateAssociationMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize"
+import Usuario from "./Usuario"
 
-class Cuenta extends Model {}
+class Cuenta extends Model<InferAttributes<Cuenta>, InferCreationAttributes<Cuenta>> {
+    declare id: CreationOptional<string>
+    declare email: string
+    declare password: string
+}
 
 Cuenta.init(
     {
