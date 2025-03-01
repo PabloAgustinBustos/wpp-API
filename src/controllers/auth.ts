@@ -11,6 +11,8 @@ type registerDTO = {
 }
 export const register = async (request: Request<{}, {}, registerDTO>, response: Response) => {
     const { username, email, password } = request.body
+
+    console.log(request.body)
     
     try {
         const crearCuentaResponse = await Cuenta.crearCuenta(email, password)

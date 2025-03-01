@@ -42,9 +42,13 @@ Cuenta.init(
             },
 
             set(value: string){
+                console.log("Contraseña plana", value)
+
                 const salt = bcrypt.genSaltSync(10)
 
                 const hashedPassword = bcrypt.hashSync(value, salt)
+
+                console.log("Contraseña hasheada", hashedPassword)
 
                 this.setDataValue("password", hashedPassword)
             }

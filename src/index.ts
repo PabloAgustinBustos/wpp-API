@@ -1,8 +1,11 @@
 import dotenv from "dotenv"
 dotenv.config()
 
+// Servidor y conexión con sequelize
 import app from "./app"
 import sequelize from "./sequelize"
+
+// Modelos
 import Cuenta from "./models/Cuenta"
 import Usuario from "./models/Usuario"
 import Perfil from "./models/Perfil"
@@ -18,7 +21,7 @@ sequelize.authenticate().then(() => {
 
     sequelize.sync({ 
         force: true,
-        alter: false
+        //alter: true
     })
 
     console.log("conectado a la bd")
