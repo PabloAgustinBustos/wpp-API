@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express"
 import cuentaRouter from "./routes/cuenta.routes"
 import authRouter from "./routes/auth.routes"
+import perfilRouter from "./routes/perfil.routes"
 
 const app = express()
 
@@ -12,5 +13,6 @@ app.get("", (request: Request, response: Response) => {
 
 app.use("/cuenta", cuentaRouter)
 app.use("/auth", authRouter)
+app.use("/perfil", perfilRouter)
 
 export default app

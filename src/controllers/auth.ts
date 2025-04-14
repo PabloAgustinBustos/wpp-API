@@ -12,19 +12,21 @@ type registerDTO = {
 export const register = async (request: Request<{}, {}, registerDTO>, response: Response) => {
     const { username, email, password } = request.body
 
-    const crearCuentaResponse = await Cuenta.crearCuenta(email, password)
+    let crearPerfilResponse = null
+    let crearUsuarioResponse = null
+    let crearCuentaResponse = await Cuenta.crearCuenta(email, password)
 
     if (crearCuentaResponse.error && !crearCuentaResponse.nuevaCuenta) {
         response.status(400).json(crearCuentaResponse)
         return
     } else {
-        const crearUsuarioResponse = await Usuario.crearUsuario(crearCuentaResponse.nuevaCuenta!.id, username)
+        crearUsuarioResponse = await Usuario.crearUsuario(crearCuentaResponse.nuevaCuenta!.id, username)
 
         if (crearUsuarioResponse.error) {
             response.status(400).json(crearCuentaResponse)
             return
         } else {
-            const crearPerfilResponse = await Perfil.crearPerfil(
+            crearPerfilResponse = await Perfil.crearPerfil(
                 crearUsuarioResponse.nuevoUsuario?.id as string
             )
 
@@ -34,6 +36,8 @@ export const register = async (request: Request<{}, {}, registerDTO>, response: 
             }
         }
     }
+
+    // Generar token para usuario, perfil y contraseña
 
     response.sendStatus(201)
     
