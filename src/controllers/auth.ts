@@ -12,44 +12,29 @@ type registerDTO = {
 export const register = async (request: Request<{}, {}, registerDTO>, response: Response) => {
     const { username, email, password } = request.body
 
-    console.log(request.body)
-    
-    try {
-        const crearCuentaResponse = await Cuenta.crearCuenta(email, password)
+    const crearCuentaResponse = await Cuenta.crearCuenta(email, password)
 
-        console.log("Cuenta creada")
+    if (crearCuentaResponse.error && !crearCuentaResponse.nuevaCuenta) {
+        response.status(400).json(crearCuentaResponse)
+        return
+    } else {
+        const crearUsuarioResponse = await Usuario.crearUsuario(crearCuentaResponse.nuevaCuenta!.id, username)
 
-        if (crearCuentaResponse.error && !crearCuentaResponse.nuevaCuenta) {
-            response.json(crearCuentaResponse)
+        if (crearUsuarioResponse.error) {
+            response.status(400).json(crearCuentaResponse)
+            return
         } else {
-            console.log("No hay error, creando usuario")
-            const crearUsuarioResponse = await Usuario.crearUsuario(crearCuentaResponse.nuevaCuenta!.id, username)
+            const crearPerfilResponse = await Perfil.crearPerfil(
+                crearUsuarioResponse.nuevoUsuario?.id as string
+            )
 
-            if (crearUsuarioResponse.error) {
-                response.json(crearCuentaResponse)
-            } else {
-                const crearPerfilResponse = await Perfil.crearPerfil(
-                    crearUsuarioResponse.nuevoUsuario?.id as string
-                )
-
-                if (crearPerfilResponse.error) {
-                    response.json(crearCuentaResponse)
-                }
+            if (crearPerfilResponse.error) {
+                response.status(400).json(crearCuentaResponse)
+                return
             }
         }
-
-        response.sendStatus(201)
-    } catch (e) {
-        if (e instanceof ValidationError) {
-            response.status(400).json({
-                error: true,
-                messages: e.errors.map(error => error.message) as string[]
-            })
-        } else {
-            response.status(400).json({
-                error: true
-            })
-        }
-
     }
+
+    response.sendStatus(201)
+    
 }

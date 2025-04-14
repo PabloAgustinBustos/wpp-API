@@ -15,10 +15,7 @@ export const crearCuenta = async(request: Request<{}, {}, crearCuentaDTO>, respo
             nuevaCuenta: serviceResponse.nuevaCuenta 
         })
     } else {
-        response.status(400).json({ 
-            error: "Error al crear la cuenta",
-            failed: serviceResponse.messages
-        })
+        response.status(400).json(serviceResponse)
     }
 
 }

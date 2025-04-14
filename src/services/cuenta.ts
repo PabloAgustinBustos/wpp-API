@@ -4,14 +4,26 @@ import { CrearReturnType } from "./types";
 
 interface CrearCuentaReturnType extends CrearReturnType {
     nuevaCuenta?: InferAttributes<Cuenta, { omit: never; }>
+    error: boolean,
+    details?: ValidationError
 }
 
 export const crearCuenta = async(email: string, password: string): Promise<CrearCuentaReturnType> => {
-    const nuevaCuenta = await Cuenta.create({email, password})
-    
-    return {
-        error: false,
-        nuevaCuenta: nuevaCuenta.dataValues
+    let nuevaCuenta: Cuenta | null = null
+
+    try {
+        nuevaCuenta = await Cuenta.create({email, password})
+
+        return {
+            error: false,
+            nuevaCuenta: nuevaCuenta.dataValues
+        }
+
+    } catch (e) {
+        return {
+            error: true,
+            details: e as ValidationError
+        }
     }
 }
 
