@@ -1,4 +1,5 @@
 import { InferAttributes, ValidationError } from "sequelize"
+import bcrypt from "bcrypt"
 import Cuenta from "../models/Cuenta"
 import { CrearReturnType } from "./types";
 
@@ -35,4 +36,31 @@ export const obtenerCuentas = async() => {
     } catch(e) {
         console.log("Error al obtener cuentas", e)
     }
+}
+
+export const buscarCuenta = async(email: string) => {
+    try {
+        console.log("Buscando cuenta con email", email)
+        const cuenta = await Cuenta.findOne({
+            where: {
+                email
+            }
+        })
+    
+        console.log("Encontré la cuenta", cuenta)
+        return cuenta
+    } catch(e) {
+        console.log("ocurrió un error :(", e)
+    }
+}
+
+export const passwordCoincide = (hashPassword: string, password: string) => {
+    console.log({password, hashPassword})
+
+    let result = bcrypt.compareSync(password, hashPassword)
+
+    console.log("result", result)
+
+    return result
+
 }

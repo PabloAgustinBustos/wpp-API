@@ -1,13 +1,11 @@
 import { Router } from "express";
-import { register } from "../controllers/auth";
-import { validarRegisterDTO } from "../middleware/register";
+import { login, register } from "../controllers/auth";
+import { validarRegisterDTO, validarLoginDTO } from "../middleware/auth";
 
 const auth = Router()
 
 // endpoint /auth/login
-auth.post("/login", (req, res) => {
-    res.send("Login")
-})
+auth.post("/login", validarLoginDTO, login)
 
 // endpoint /auth/register
 auth.post("/register", validarRegisterDTO, register)

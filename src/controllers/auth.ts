@@ -3,6 +3,7 @@ import * as Cuenta from "../services/cuenta"
 import * as Usuario from "../services/usuario"
 import * as Perfil from "../services/profile"
 import { ValidationError } from "sequelize"
+import jwt from "jsonwebtoken"
 
 type registerDTO = {
     username: string
@@ -37,8 +38,40 @@ export const register = async (request: Request<{}, {}, registerDTO>, response: 
         }
     }
 
-    // Generar token para usuario, perfil y contraseña
-
     response.sendStatus(201)
     
+}
+
+type loginDTO = {
+    email: string
+    password: string
+}
+export const login = async(request: Request<{}, {}, loginDTO>, response: Response) => {
+    const { email, password } = request.body
+
+    const cuenta = await Cuenta.buscarCuenta(email)
+
+    if (cuenta && Cuenta.passwordCoincide(cuenta.dataValues.password, password)) {
+        const TOKEN_KEY = process.env.TOKEN_KEY as string
+
+        const token = jwt.sign({ 
+            cuentaID: cuenta.dataValues.id, 
+            email 
+        }, TOKEN_KEY)
+
+        console.log(token)
+
+        response.status(200).json({
+            token
+        })
+
+        return
+    } else {
+        response.status(400).json({
+            error: true,
+            message: "usuario no existe o contraseña no es correcta"
+        })
+
+        return
+    }
 }
